@@ -28,15 +28,14 @@ pipeline {
         }
         
         stage('Deploy') {
-            steps {
-                echo 'Desplegando a Tomcat...'
-                sh '''
-                    echo "Copiando WAR a Tomcat..."
-                    cp CalculadoraWeb/target/*.war /var/jenkins_home/CalculadoraWeb.war
-                    echo "Despliegue completado"
-                '''
-            }
-        }
+    steps {
+        echo 'Desplegando a Tomcat...'
+        sh '''
+            echo "Copiando WAR al volumen compartido con Windows..."
+            cp CalculadoraWeb/target/*.war /var/jenkins_home/tomcat-deploy/CalculadoraWeb.war
+        '''
+    }
+}
     }
     
     post {
