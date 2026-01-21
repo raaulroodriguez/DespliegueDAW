@@ -1,0 +1,52 @@
+pipeline {
+    agent any
+    
+    tools {
+        maven 'Maven'
+        jdk 'JDK 11'
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                echo 'Obteniendo código fuente...'
+                git 'https://github.com/raaulroodriguez/DespliegueDAW.git'
+                echo 'Código disponible en workspace'
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                echo 'Compilando proyecto con Maven...'
+                bat 'mvn clean package'
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                echo 'Ejecutando pruebas...'
+                bat 'mvn test'
+            }
+        }
+        
+        stage('Deploy') {
+            steps {
+                echo 'Desplegando a Tomcat...'
+                bat '''
+                    echo Copiando WAR a Tomcat...
+                    copy target\\*.war D:\\VolumenDocker\\Tomcat\\CalculadoraWeb.war
+                    echo Despliegue completado
+                '''
+            }
+        }
+    }
+    
+    post {
+        success {
+            echo '✅ Pipeline completado exitosamente!'
+        }
+        failure {
+            echo '❌ Pipeline falló. Revisar logs.'
+        }
+    }
+}
