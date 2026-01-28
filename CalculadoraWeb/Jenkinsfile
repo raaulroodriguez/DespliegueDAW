@@ -17,6 +17,12 @@ pipeline {
                 sh 'mvn -f CalculadoraWeb/pom.xml clean package'
             }
         }
+        stage('Compile') {
+            steps {
+                echo 'Compilando proyecto con Maven...'
+                sh 'mvn -f CalculadoraWeb/pom.xml compile'
+            }
+        }
         stage('Test') {
             steps {
                 echo 'Ejecutando pruebas...'
